@@ -1,11 +1,12 @@
 #pragma once
 #include <map>
 #include <initializer_list>
+#include <utility>
 
 //Bijection = 全単射
 //keyとvalueを持つ二分木クラス(map?)を二つ用意して、keyに値、valueに対応する値のkeyへの参照を格納することで、相互に高速検索出来る…はず。
 //相互にポインタを持ち合うコンテナは作成不可であることが判明w
-//pair<int,pair<int,pair<int,pair<int,pair<int,.....>*>*>*>*> first:
+//map<int,map<int,map<int,map<int,map<int,.....>*>*>*>*> first:
 //void* を持たせたらできた。
 
 
@@ -15,15 +16,33 @@ namespace nagisakuya {
 		class bijection
 		{
 		private:
-			std::map<F, typename std::map<S, void*>::iterator> f;
-			std::map<S, typename std::map<F, void*>::iterator> s;
+			typename std::map<F,const void*> f;
+			typename std::map<S,const void*> s;
 		public:
-			bijection(std::initializer_list<std::pair < F, S >>input = {});
-			void add(std::pair<F, S> input);
-			void emplace(F first, S second);
-			size_t size();
-			F find_first(S input);
-			S find_second(F input);
+			bijection(){};
+			bijection(std::initializer_list<typename std::pair < F, S >> input) {
+				for (auto i : input)
+				{
+					add(i);
+				}
+			}
+			void add(typename std::pair<F, S> input) {
+				emplace(input.first, input.second);
+			}
+			void emplace(F first, S second) {
+				f[first];
+				s[second] = &(f.find(first)->first);
+				f[first] = &(s.find(second)->first);
+			}
+			F find_at(S input) {
+				return *(F*)f.at(input);
+			}
+			S find_at(F input) {
+				return *(S*)s.at(input);
+			}
+			bijection operator =(std::initializer_list<typename std::pair < F, S >> input) {
+				return bijection(input);
+			}
 		};
 	}
 }

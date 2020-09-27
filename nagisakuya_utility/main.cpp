@@ -4,5 +4,6 @@ using namespace nagisakuya::Bijection;
 using namespace std;
 
 int main(void) {
-	bijection<int, string> test();
+	bijection<int, string> test;
+	test.emplace(1, "one");
 }
