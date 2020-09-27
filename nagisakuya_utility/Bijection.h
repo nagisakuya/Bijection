@@ -16,29 +16,32 @@ namespace nagisakuya {
 		class bijection
 		{
 		private:
-			typename std::map<F,const void*> f;
-			typename std::map<S,const void*> s;
+			typename std::map<F,const void*> first_element;
+			typename std::map<S,const void*> second_element;
 		public:
 			bijection(){};
 			bijection(std::initializer_list<typename std::pair < F, S >> input) {
+				add(input);
+			}
+			void add(std::initializer_list<typename std::pair < F, S >> input) {
 				for (auto i : input)
 				{
-					add(i);
+					emplace(i.first, i.second);
 				}
 			}
 			void add(typename std::pair<F, S> input) {
 				emplace(input.first, input.second);
 			}
 			void emplace(F first, S second) {
-				f[first];
-				s[second] = &(f.find(first)->first);
-				f[first] = &(s.find(second)->first);
+				first_element[first];
+				second_element[second] = &(first_element.find(first)->first);
+				first_element[first] = &(second_element.find(second)->first);
 			}
-			F find_at(S input) {
-				return *(F*)f.at(input);
+			F at_stof(S second) {
+				return *(F*)(second_element.at(second));
 			}
-			S find_at(F input) {
-				return *(S*)s.at(input);
+			S at_ftos(F first) {
+				return *((S*)first_element.at(first));
 			}
 			bijection operator =(std::initializer_list<typename std::pair < F, S >> input) {
 				return bijection(input);
