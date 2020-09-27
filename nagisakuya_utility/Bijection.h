@@ -1,7 +1,7 @@
 #pragma once
 #include <map>
 #include <initializer_list>
-#include <utility>
+#include <string>
 
 //Bijection = 全単射
 //keyとvalueを持つ二分木クラス(map?)を二つ用意して、keyに値、valueに対応する値のkeyへの参照を格納することで、相互に高速検索出来る…はず。
